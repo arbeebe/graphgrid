@@ -8,12 +8,26 @@ body {
 
 p { margin: 3px; }
 
+#patientname {
+	font-size: 150%;
+}
+
+#runtime {
+	font-size: 150%;
+	color: #666;
+	font-weight: bold;
+}
+
+#rundate {
+	color: #666;
+}
+
 #patientnews {
 	float: right;
 	color: #FFF;
 	font-weight: bold;
 	font-size: 200%;
-	background-color: #D22;
+	background-color: #DDD;
 	padding: 8px 15px;
 	border-radius: 35px;
 }
@@ -34,17 +48,17 @@ p { margin: 3px; }
 	background-color: #8F8;
 }
 
-#RRchart, #HRchart {
+#BPchart {
 	text-align: center;
-	vertical-align: centre;
-	height: 100px;
+	vertical-align: middle;
+	height: 150px;
 	width: 320px;
 }
 
-#BPchart {
+#HRchart, #RRchart, #SPchart, #Tempchart {
 	text-align: center;
-	vertical-align: centre;
-	height: 100px;
+	vertical-align: middle;
+	height: 75px;
 	width: 320px;
 }
 
