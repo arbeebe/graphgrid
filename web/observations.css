@@ -1,0 +1,53 @@
+body {
+	background-color: #FFF;
+	color: #222;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 75%;
+	width: 320px;
+}
+
+p { margin: 3px; }
+
+#patientnews {
+	float: right;
+	color: #FFF;
+	font-weight: bold;
+	font-size: 200%;
+	background-color: #D22;
+	padding: 8px 15px;
+	border-radius: 35px;
+}
+
+.newsScoreNone {
+	background-color: #888;
+}
+
+.newsScoreLow {
+	background-color: #8F8;
+}
+
+.newsScoreMedium {
+	background-color: #FF8;
+}
+
+.newsScoreHigh {
+	background-color: #8F8;
+}
+
+#RRchart, #HRchart {
+	text-align: center;
+	vertical-align: centre;
+	height: 100px;
+	width: 320px;
+}
+
+#BPchart {
+	text-align: center;
+	vertical-align: centre;
+	height: 100px;
+	width: 320px;
+}
+
+footer {
+	text-align: right;
+}
