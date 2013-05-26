@@ -22,6 +22,24 @@ p { margin: 3px; }
 	color: #666;
 }
 
+#currRR, #currHR, #currBP, #currSPO2, #currTemp {
+	float: right;
+	color: #666;
+}
+
+#currRRvalue, #currTempvalue, #currSPO2value, #currHRvalue, #currUpperBPvalue, #currLowerBPvalue {
+	color: #000;
+	font-size: 150%;
+}
+
+#currUpperBPvalue {
+	text-decoration: underline;
+}
+
+#patientnewshead {
+	float: right;
+}
+
 #patientnews {
 	float: right;
 	color: #FFF;
@@ -51,15 +69,15 @@ p { margin: 3px; }
 #BPchart {
 	text-align: center;
 	vertical-align: middle;
-	height: 150px;
-	width: 320px;
+	height: 120px;
+	width: 280px;
 }
 
 #HRchart, #RRchart, #SPchart, #Tempchart {
 	text-align: center;
 	vertical-align: middle;
 	height: 75px;
-	width: 320px;
+	width: 280px;
 }
 
 footer {

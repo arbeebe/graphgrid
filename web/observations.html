@@ -61,8 +61,11 @@
 				return dateString;
 			}
 			
-			function updateBloodPressure(bloodPressures) {
-				
+			function updateBloodPressures(bloodPressures) {
+				for (var i = 0; i < bloodPressures.length; i++) {
+					$("#currUpperBPvalue").text(bloodPressures[i][1]);
+					$("#currLowerBPvalue").text(bloodPressures[i][2]);
+				}
 			}
 			
 			function updateHeartRates(heartRates) {
@@ -74,6 +77,7 @@
 //					rates.push(heartRates[i][1]);
 					
 					rates.push([i-1, heartRates[i][1]]);
+					$("#currHRvalue").text(heartRates[i][1]);
 				}				
 				
 				var plot3 = $.jqplot ('HRchart', [rates], { axes: { yaxis: {
@@ -92,6 +96,7 @@
 				
 				for (var i=0; i < respiratoryRates.length; i++) {
 					rates.push([i-1, respiratoryRates[i][1]]);
+					$("#currRRvalue").text(respiratoryRates[i][1]);
 				}
 				
 			    var plot1 = $.jqplot ('RRchart', [rates],
@@ -108,6 +113,7 @@
 				
 				for (var i=0; i < spO2Rates.length; i++) {
 					rates.push([i/2, spO2Rates[i][1]]);
+					$("#currSPO2value").text(spO2Rates[i][1]+"%");
 				}
 				
 			    var plot4 = $.jqplot ('SPchart', [rates],
@@ -124,6 +130,7 @@
 				
 				for (var i=0; i < temps.length; i++) {
 					rates.push([i-2, temps[i][1]]);
+					$("#currTempvalue").text(temps[i][1]);
 				}
 				
 			    var plot5 = $.jqplot ('Tempchart', [rates],
@@ -152,27 +159,28 @@
 				});
 
 				$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20search.termextract%20where%20context%3D%22Italian%20sculptors%20and%20painters%20of%20the%20renaissance%20favored%20the%20Virgin%20Mary%20for%20inspiration%22%20and%20query%3D%22madonna%22&format=json", function(data) {
-					var rrresults = $.parseJSON('[["2013-05-26T08:28:42Z", 20],["2013-05-26T15:21:09Z", 18],["2013-05-26T19:35:22Z", 22],["2013-05-26T22:35:22Z", 25]]');
+					var rrresults = $.parseJSON('[["2013-05-26T08:28:42Z", 20],["2013-05-26T15:21:09Z", 18],["2013-05-26T19:35:22Z", 25],["2013-05-26T22:35:22Z", 16]]');
 					updateRespiratoryRates(rrresults); // TODO: Use data.
 				});
 
 				$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20search.termextract%20where%20context%3D%22Italian%20sculptors%20and%20painters%20of%20the%20renaissance%20favored%20the%20Virgin%20Mary%20for%20inspiration%22%20and%20query%3D%22madonna%22&format=json", function(data) {
-					var spresults = $.parseJSON('[["2013-05-26T08:28:42Z", 95],["2013-05-26T15:21:09Z", 96],["2013-05-26T19:35:22Z", 95],["2013-05-26T20:35:22Z", 95],["2013-05-26T21:35:22Z", 94]]');
+					var spresults = $.parseJSON('[["2013-05-26T08:28:42Z", 99],["2013-05-26T15:21:09Z", 99],["2013-05-26T19:35:22Z", 98],["2013-05-26T20:35:22Z", 99],["2013-05-26T21:35:22Z", 98]]');
 					updateSpO2Rates(spresults); // TODO: Use data.
 				});
 
 				$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20search.termextract%20where%20context%3D%22Italian%20sculptors%20and%20painters%20of%20the%20renaissance%20favored%20the%20Virgin%20Mary%20for%20inspiration%22%20and%20query%3D%22madonna%22&format=json", function(data) {
-					var tempresults = $.parseJSON('[["2013-05-26T08:28:42Z", 37.6],["2013-05-26T15:21:09Z", 38.2],["2013-05-26T19:35:22Z", 38.5],["2013-05-26T20:35:22Z", 38.6],["2013-05-26T21:05:22Z", 38.7],["2013-05-26T21:45:22Z", 38.9]]');
+					var tempresults = $.parseJSON('[["2013-05-26T08:28:42Z", 37.6],["2013-05-26T15:21:09Z", 38.2],["2013-05-26T19:35:22Z", 38.5],["2013-05-26T20:35:22Z", 38.6],["2013-05-26T21:05:22Z", 38.9],["2013-05-26T21:45:22Z", 39.1]]');
 					updateTemperatures(tempresults); // TODO: Use data.
 				});
 
 				$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20search.termextract%20where%20context%3D%22Italian%20sculptors%20and%20painters%20of%20the%20renaissance%20favored%20the%20Virgin%20Mary%20for%20inspiration%22%20and%20query%3D%22madonna%22&format=json", function(data) {
-					var bpresults = $.parseJSON('[["2013-05-26T08:28:42Z", 120, 80],["2013-05-26T15:21:09Z", 124, 77],["2013-05-26T19:35:22Z", 117, 71]]');
+					var bpresults = $.parseJSON('[["2013-05-26T08:28:42Z", 120, 80],["2013-05-26T15:21:09Z", 124, 92],["2013-05-26T19:35:22Z", 130, 100]]');
+					updateBloodPressures(bpresults);
 					var catOHLC = [[1.7, bpresults[0][1], bpresults[0][2], calculateMap(bpresults[0][1],bpresults[0][2])],
 					               [data.query.count, bpresults[1][1], bpresults[1][2], calculateMap(bpresults[1][1],bpresults[1][2])],
 					               [3, bpresults[2][1], bpresults[2][2], calculateMap(bpresults[2][1],bpresults[2][2])]];
 					                
-					               var ticks = ["5-4d", "4-3d", "3-2d", data.query.count, "24-18h", "18-12h", "12-6h", "6-0h"];
+					               var ticks = ["5-4d", "4-3d", "3-2d", data.query.count+"-1d", "24-18h", "18-12h", "12-6h", "6-0h"];
 					                    
 					               plot4 = $.jqplot('BPchart',[catOHLC],{
 					                 axes: {
@@ -190,7 +198,7 @@
 				
 				$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20search.termextract%20where%20context%3D%22Italian%20sculptors%20and%20painters%20of%20the%20renaissance%20favored%20the%20Virgin%20Mary%20for%20inspiration%22%20and%20query%3D%22madonna%22&format=json", function(data) {
 
-					var hrresults = $.parseJSON('[["2013-05-26T08:28:42Z", 90],["2013-05-26T15:21:09Z", 108],["2013-05-26T19:35:22Z", 122]]');
+					var hrresults = $.parseJSON('[["2013-05-26T08:28:42Z", 90],["2013-05-26T15:21:09Z", 88],["2013-05-26T19:35:22Z", 70]]');
 					updateHeartRates(hrresults); // TODO: Use data.
 				});
 		  });
@@ -198,8 +206,9 @@
 	</HEAD>
 	<BODY>
 		<HEADER>
-			<P id="patientnews">(#)</P>
+			<P id="patientnewshead">EWS</P>
 			<P><SPAN id="runtime">##:##</SPAN>&nbsp;<SPAN id="rundate">##/##/##</SPAN></P>
+			<P id="patientnews">(#)</P>
 			<P>
 				<SPAN id="patientname">Name</SPAN>
 			</P>
@@ -209,28 +218,34 @@
 			</P>
 		</HEADER>
 
+<HR />
 		<SECTION id="RespRate">
-			<div id="RRchart" style="height:75px; width:320px;">
+			<div id="currRR">&nbsp;<p>RR</p><p id="currRRvalue">##</p></div>
+			<div id="RRchart" style="height:75px; width:280px;">
 				<p>&nbsp;</p><p>loading</p>
 			</div>
 		</SECTION>
 		<SECTION id="SpO2Rate">
-			<div id="SPchart" style="height:75px; width:320px;">
+			<div id="currSPO2">&nbsp;<p>SPO<sub>2</sub></p><p id="currSPO2value">##</p></div>
+			<div id="SPchart" style="height:75px; width:280px;">
 				<p>&nbsp;</p><p>loading</p>
 			</div>
 		</SECTION>
 		<SECTION id="Temperature">
-			<div id="Tempchart" style="height:75px; width:320px;">
+			<div id="currTemp">&nbsp;<p>Temp</p><p id="currTempvalue">##</p></div>
+			<div id="Tempchart" style="height:75px; width:280px;">
 				<p>&nbsp;</p><p>loading</p>
 			</div>
 		</SECTION>
 		<SECTION id="BP">
-			<div id="BPchart" style="height:150px; width:320px;">
+			<div id="currBP">&nbsp;<p>BP</p><p id="currUpperBPvalue">##</p><p id="currLowerBPvalue">##</p></div>
+			<div id="BPchart" style="height:120px; width:280px;">
 				<p>&nbsp;</p><p>loading</p><p><img src="377.gif" alt="loading" /></p>
 			</div>
 		</SECTION>
 		<SECTION id="HeartRate">
-			<div id="HRchart" style="height:75px; width:320px;">
+			<div id="currHR">&nbsp;<p>HR</p><p id="currHRvalue">##</p></div>
+			<div id="HRchart" style="height:75px; width:280px;">
 				<p>&nbsp;</p><p>loading</p>
 			</div>
 		</SECTION>
