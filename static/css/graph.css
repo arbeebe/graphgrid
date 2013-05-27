@@ -1,0 +1,75 @@
+* {
+font-family: 'QuicksandBold';
+}
+
+@font-face {
+    font-family: 'QuicksandBold';
+    src: url('Quicksand_Bold-webfont.eot');
+    src: url('Quicksand_Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('Quicksand_Bold-webfont.woff') format('woff'),
+         url('Quicksand_Bold-webfont.ttf') format('truetype'),
+         url('Quicksand_Bold-webfont.svg#QuicksandBold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+	}
+
+body {
+	width: 620px;
+}
+
+table, th, td, tr, img
+{
+border: 0px;
+padding: 0px;
+margin: 0px;
+}
+table, th, td, tr
+{
+border-collapse:collapse;
+}
+ul {
+	display: table; 
+}
+li {
+	display: table-cell; 
+	text-align: center; 
+	border: 0px; 
+	}
+
+#date, #time, #obslabel {
+	color: gray;
+}
+#date, #time, #name, #dob, #mrn {
+	padding:0px 20px;
+	margin: 0px;
+}
+
+#time {
+	font-size: 200%;
+	font-weight: bold;
+}
+
+#date {
+	font-size: 75%;
+}
+
+#name {
+	font-size: 200%;
+	font-weight: bold;
+}
+
+#news {
+	float: right;
+	align: right;
+}
+#obs, #obslabel {
+	padding: 0px 5px;
+	margin: 0px;
+}
+#obslabel {
+	font-size: 80%;
+}
+#obs {
+	font-weight: bold;
+	font-size: 125%;
+}

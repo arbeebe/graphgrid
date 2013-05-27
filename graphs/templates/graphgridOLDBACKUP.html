@@ -9,40 +9,26 @@
 <link rel="stylesheet" type="text/css" href="{% static "jqPlot/jquery.jqplot.css" %}" />
 <script language="javascript">
 $(document).ready(function(){
-
-  var ajaxDataRenderer = function(url, plot, options) {
-    var ret = null;
-    $.ajax({
-      // have to use synchronous here, else the function
-      // will return before the data is fetched
-      async: false,
-      url: options.Url,
-      dataType:"json",
-      success: function(data) {
-        ret = data;
-      }
-    });
-    return ret;
+  var sineRenderer = function() {
+    var data = [[], []];
+    for (var i=0; i<13; i+=0.5) {
+      data[0].push([i, Math.sin(i)]);
+      data[1].push([i, Math.cos(i)]);
+    }
+    return data;
   };
- 
-  // The url for our json data
-  var jsonurl = "./jsondata.txt";
-
   $('.observation_graph').each(
       function(index, graph){
         var g = $(graph);
         var series =[];
         g.children("span.observation_series").each(
-          function(i, s){series.push({color: $(s).attr("colour")});
+          function(i, s){series.push({color: $(s).attr("colour")});   
                          }
           );
         g.jqplot([],{
-        dataRenderer: ajaxDataRenderer,
-        dataRendererOptions: {
-           Url: jsonurl
-        }
+        dataRenderer: sineRenderer,
         series: series
-        });
+        });  
       }
    );
 });
