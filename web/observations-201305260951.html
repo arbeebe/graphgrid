@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<HTML>
+	<HEAD>
+		<TITLE>Observations</TITLE>
+		
+		<SCRIPT SRC="jquery-1.10.0.js"></SCRIPT>
+
+		<script type="text/javascript" src="jquery.jqplot.1.0.8r1250/dist/jquery.jqplot.js"></script>
+		
+		<LINK HREF="observations.css" rel="stylesheet" type="text/css">
+		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+
+  <script class="include" type="text/javascript" src="jquery.jqplot.1.0.8r1250/dist/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+  <script class="include" type="text/javascript" src="jquery.jqplot.1.0.8r1250/dist/plugins/jqplot.highlighter.min.js"></script>
+  <script class="include" type="text/javascript" src="jquery.jqplot.1.0.8r1250/dist/plugins/jqplot.canvasTextRenderer.min.js"></script>
+  <script class="include" type="text/javascript" src="jquery.jqplot.1.0.8r1250/dist/plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
+
+
+	<script type="text/javascript" src="jquery.jqplot.1.0.8r1250/dist/plugins/jqplot.dateAxisRenderer.min.js"></script>
+	<script type="text/javascript" src="jquery.jqplot.1.0.8r1250/dist/plugins/jqplot.ohlcRenderer.min.js"></script>
+	<script type="text/javascript" src="jquery.jqplot.1.0.8r1250/dist/plugins/jqplot.cursor.min.js"></script>
+
+		<SCRIPT>
+			var host = "http://localhost:8080/";
+			var heartrate = "/heartrate/";
+			var bloodpressure = "/bloodpressure/";
+			var respirationrate = "/resprate/";
+			var patientdetails = "/patientdetails/"
+		
+			$(document).ready(function () {
+				$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20search.termextract%20where%20context%3D%22Italian%20sculptors%20and%20painters%20of%20the%20renaissance%20favored%20the%20Virgin%20Mary%20for%20inspiration%22%20and%20query%3D%22madonna%22&format=json", function(data) {
+
+					$("#patientname").text("Name: " + data.query.results.Result);
+					$("#patientdob").text("D.o.B.: " + data.query.created);
+					$("#patientnews").text(data.query.count);
+					$("#patientmrn").text("Hospital No.: 000000000");
+				  
+				})
+				.fail(function (xmlHttpRequest, textStatus) {
+					$("#patientname").text("Error: " + textStatus);
+					$("#patientdob").text("Error: " + textStatus);
+					$("#patientnews").text("Error: " + textStatus);
+					$("#patientmrn").text("Error: " + textStatus);
+				});
+
+				$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20search.termextract%20where%20context%3D%22Italian%20sculptors%20and%20painters%20of%20the%20renaissance%20favored%20the%20Virgin%20Mary%20for%20inspiration%22%20and%20query%3D%22madonna%22&format=json", function(data) {
+				    var plot1 = $.jqplot ('RRchart', [[data.query.count,data.query.count,data.query.count,data.query.count,data.query.count,8,data.query.count,data.query.count,data.query.count]]);
+				});
+
+				$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20search.termextract%20where%20context%3D%22Italian%20sculptors%20and%20painters%20of%20the%20renaissance%20favored%20the%20Virgin%20Mary%20for%20inspiration%22%20and%20query%3D%22madonna%22&format=json", function(data) {
+					var catOHLC = [[1, 138.7, 139.68, 138.7, 139.68],
+					               [data.query.count, 143.46, 144.66, 139.79, 140.02],
+					               [3, 140.67, 143.56, 132.88, 142.44],
+					               [4, 124.76, 135.9, 124.55, 135.81],
+					               [4.5, 123.73, 129.31, 121.57, 122.5],
+					               [7, 120, 80, 120, 80],
+					               [7.2, 125, 75, 125, 75]];
+					                
+					               var ticks = ["5-4d", "4-3d", "3-2d", data.query.count, "24-18h", "18-12h", "12-6h", "6-0h"];
+					                    
+					               plot4 = $.jqplot('BPchart',[catOHLC],{
+					                 axes: {
+					                     xaxis: {
+					                         renderer:$.jqplot.CategoryAxisRenderer,
+					                         ticks:ticks
+					                     }
+					                 },
+					                 series: [{renderer:$.jqplot.OHLCRenderer, rendererOptions:{candleStick:true}}]
+					               });
+					       });
+				
+				$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20search.termextract%20where%20context%3D%22Italian%20sculptors%20and%20painters%20of%20the%20renaissance%20favored%20the%20Virgin%20Mary%20for%20inspiration%22%20and%20query%3D%22madonna%22&format=json", function(data) {
+
+				    var l2 = [11, 9, 5, 12, 14];
+				    var l3 = [4, 8, 5, 3, 6];
+				    var l4 = [12, 6, 13, 11, 2];    
+
+				    var plot3 = $.jqplot('HRchart',[l2, l3, l4],{
+				        stackSeries: true,
+				        showMarker: false,
+				        seriesDefaults: {
+				            fill: true
+				        },
+				        axes: {
+				            xaxis: {
+				                renderer: $.jqplot.CategoryAxisRenderer,
+				                ticks: ["5-4d", "4-3d", "3-2d", "2-1d", "24-18h", "18-12h", "12-6h", "6-0h"]
+				            }
+				        }
+				     });
+				});
+		  });
+		</SCRIPT>		
+	</HEAD>
+	<BODY>
+		<HEADER>
+			<P id="patientnews">(#)</P>
+			<P id="patientname">Name</P>
+			<P id="patientdob">D.o.B.</P>
+			<P id="patientmrn">Hospital No.</P>
+		</HEADER>
+
+		<SECTION id="RespRate">
+			<div id="RRchart" style="height:100px; width:320px;">
+				<p>&nbsp;</p><p>loading</p><p><img src="377.gif" alt="loading" /></p>
+			</div>
+		</SECTION>
+		<SECTION id="BP">
+			<div id="BPchart" style="height:100px; width:320px;">
+				<p>&nbsp;</p><p>loading</p><p><img src="377.gif" alt="loading" /></p>
+			</div>
+		</SECTION>
+		<SECTION id="HeartRate">
+			<div id="HRchart" style="height:100px; width:320px;">
+				<p>&nbsp;</p><p>loading</p><p><img src="377.gif" alt="loading" /></p>
+			</div>
+		</SECTION>
+		
+		<FOOTER>
+			<IMG SRC="nhshackday-logo-full.png" />
+		</FOOTER>
+	</BODY>
+</HTML>

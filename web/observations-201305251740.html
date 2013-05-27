@@ -1,0 +1,87 @@
+<HTML>
+	<HEAD>
+		<TITLE>Observations</TITLE>
+		<SCRIPT SRC="jquery-1.10.0.js"></SCRIPT>
+
+		<script type="text/javascript" src="jquery.jqplot.1.0.8r1250/dist/jquery.jqplot.js"></script>
+		<!-- <script type="text/javascript" src="jquery.jqplot.1.0.8r1250/dist/plugins/jqplot.canvasTextRenderer.min.js"></script> -->
+		<!-- <script type="text/javascript" src="jquery.jqplot.1.0.8r1250/dist/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script> -->
+		
+		
+		<LINK HREF="observations.css" rel="stylesheet" type="text/css">
+		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+
+		<SCRIPT>
+		  $(document).ready(function () {
+			  
+//			  $.ajax({
+//				  url: 'api.tiles.mapbox.com/v3/albums.json'
+////				  data: {'name': 'Dan'},
+//				  // async: true
+//				  }).done(function(json) { alert(json); });
+	
+
+//			$.getJSON("http://api.tiles.mapbox.com/v3/albums.json", function(data) {
+	$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20search.termextract%20where%20context%3D%22Italian%20sculptors%20and%20painters%20of%20the%20renaissance%20favored%20the%20Virgin%20Mary%20for%20inspiration%22%20and%20query%3D%22madonna%22&format=json", function(data) {
+//				$.getJSON("sampleajax/patient.json", function(data) {
+//				alert(data + " : " + data.query.count);
+
+				$("#patientname").text("Name: " + data.query.results.Result);
+				$("#patientdob").text("D.o.B.: " + data.query.created);
+				$("#patientnews").text(data.query.count);
+				$("#patientmrn").text("Hospital No.: 000000000");
+				  
+			})
+//			.done(function() { alert( "second success" ); })
+			.fail(function (xmlHttpRequest, textStatus) {
+				$("#patientname").text("Error: " + textStatus);
+				$("#patientdob").text("Error: " + textStatus);
+				$("#patientnews").text("Error: " + textStatus);
+				$("#patientmrn").text("Error: " + textStatus);
+	        })
+//			.always(function() { alert( "complete" ); }); 
+			
+			;
+				  
+//			  });
+			  
+//			  $.ajax({  url: "observations.html",  
+	//			        cache: false}).done(function( html ) {  alert(html);});
+			  
+			  
+			  var plot1 = $.jqplot ('RRchart', [[3,7,9,1,4,6,8,2,5]].fail(function() {alert("ERROR!");}));
+			  var plot2 = $.jqplot ('BPchart', [[3,7,9,1,4,6,8,2,5]]);
+			  var plot3 = $.jqplot ('HRchart', [[3,7,9,1,4,6,8,2,5]]);
+			  
+		  });
+		</SCRIPT>		
+	</HEAD>
+	<BODY>
+		<HEADER>
+			<P id="patientnews">(#)</P>
+			<P id="patientname">Name</P>
+			<P id="patientdob">D.o.B.</P>
+			<P id="patientmrn">Hospital No.</P>
+		</HEADER>
+
+		<SECTION id="RespRate">
+			<div id="RRchart" style="height:100px; width:320px;">
+				<img src="ajax-loader.gif" alt="loading" />
+			</div>
+		</SECTION>
+		<SECTION id="BP">
+			<div id="BPchart" style="height:100px; width:320px;">
+				<img src="ajax-loader.gif" alt="loading" />
+			</div>
+		</SECTION>
+		<SECTION id="HeartRate">
+			<div id="HRchart" style="height:100px; width:320px;">
+				<img src="ajax-loader.gif" alt="loading" />
+			</div>
+		</SECTION>
+		
+		<FOOTER>
+			<IMG SRC="nhshackday-logo-full.png" />
+		</FOOTER>
+	</BODY>
+</HTML>

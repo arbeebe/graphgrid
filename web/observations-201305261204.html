@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<HTML>
+	<HEAD>
+		<TITLE>Observations</TITLE>
+		
+		<SCRIPT SRC="jquery-1.10.0.js"></SCRIPT>
+
+		<script type="text/javascript" src="jquery.jqplot.1.0.8r1250/dist/jquery.jqplot.js"></script>
+		
+		<LINK HREF="observations.css" rel="stylesheet" type="text/css">
+		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+
+  <script class="include" type="text/javascript" src="jquery.jqplot.1.0.8r1250/dist/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+  <script class="include" type="text/javascript" src="jquery.jqplot.1.0.8r1250/dist/plugins/jqplot.highlighter.min.js"></script>
+  <script class="include" type="text/javascript" src="jquery.jqplot.1.0.8r1250/dist/plugins/jqplot.canvasTextRenderer.min.js"></script>
+  <script class="include" type="text/javascript" src="jquery.jqplot.1.0.8r1250/dist/plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
+
+
+	<script type="text/javascript" src="jquery.jqplot.1.0.8r1250/dist/plugins/jqplot.dateAxisRenderer.min.js"></script>
+	<script type="text/javascript" src="jquery.jqplot.1.0.8r1250/dist/plugins/jqplot.ohlcRenderer.min.js"></script>
+	<script type="text/javascript" src="jquery.jqplot.1.0.8r1250/dist/plugins/jqplot.cursor.min.js"></script>
+
+		<SCRIPT>
+			var host = "http://localhost:8080/";
+			var heartrate = "/heartrate/";
+			var bloodpressure = "/bloodpressure/";
+			var respirationrate = "/resprate/";
+			var patientdetails = "/patientdetails/"
+		
+			function updatePatient(patientDetails) {
+				$("#patientname").text(patientDetails[0]);
+				$("#patientdob").text(patientDetails[1]);
+				$("#patientnews").text(patientDetails[3]);
+				$("#patientmrn").text("#" + patientDetails[2]);
+				
+				$("#runtime").text(getCurrentTime());
+
+				<!-- $("#patientname").text("Name: " + patientDetails[0]); -->
+				<!-- $("#patientdob").text("D.o.B.: " + patientDetails[1]); -->
+				<!-- $("#patientnews").text(patientDetails[3]); -->
+				<!-- $("#patientmrn").text("Hospital No.: " + patientDetails[2]); -->
+			}
+			
+			function getCurrentTime() {
+				var time = new Date();
+				var timeString = time.getHours() + ":";
+				if (time.getMinutes() < 10) {
+					timeString = timeString + "0";
+				}
+				timeString = timeString + time.getMinutes();
+				
+				return timeString;
+			}
+			
+			function updateBloodPressure(bloodPressures) {
+				
+			}
+			
+			function updateHeartRates(heartRates) {
+				// var times = [];
+				var rates = [];
+				
+				for (var i = 0; i < heartRates.length; i++) {
+					// times.push(heartRates[i][0]);
+//					rates.push(heartRates[i][1]);
+					
+					rates.push([i-1, heartRates[i][1]]);
+				}				
+				
+				var plot3 = $.jqplot ('HRchart', [rates], { axes: { yaxis: {
+	                    	 											min:20, max:140
+	                     										  } },
+	                									    series: [{ showLine:false,
+						            	           					markerOptions: { style:'filledSquare',
+						            	        	                size:4,
+						            	        	                color:'#000000'}
+						                        }], grid: {drawGridlines: false}
+				                       });
+			}
+			
+			function updateRespiratoryRates(respiratoryRates) {
+			    var plot1 = $.jqplot ('RRchart', [[respiratoryRates[0][1], respiratoryRates[1][1], respiratoryRates[2][1]]],
+						               {series: [{ showLine:false,
+				            	           markerOptions: { style:'filledCircle',
+				            	        	                size:4,
+				            	        	                color:'#000000'}
+				                        }], grid: {drawGridlines: false}
+                   });
+			}
+			
+			function updateSpO2Rates(spO2Rates) {
+			    var plot4 = $.jqplot ('SPchart', [[spO2Rates[0][1], spO2Rates[1][1], spO2Rates[2][1]]],
+						               {series: [{ showLine:false,
+				            	           markerOptions: { style:'filledSquare',
+				            	        	                size:4,
+				            	        	                color:'#000000'}
+				                        }], grid: {drawGridlines: false}
+			       });
+			}
+			
+			function updateTemperatures(temps) {
+			    var plot5 = $.jqplot ('Tempchart', [[temps[0][1], temps[1][1], temps[2][1]]],
+						               {series: [{ showLine:false,
+				            	           markerOptions: { style:'filledCircle',
+				            	        	                size:4,
+				            	        	                color:'#000000'}
+				                        }], grid: {drawGridlines: false}
+			       });
+			}
+
+			function calculateMap(lower, upper) {
+				return (lower + lower + upper)/3;
+			}
+			$(document).ready(function () {
+				$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20search.termextract%20where%20context%3D%22Italian%20sculptors%20and%20painters%20of%20the%20renaissance%20favored%20the%20Virgin%20Mary%20for%20inspiration%22%20and%20query%3D%22madonna%22&format=json", function(data) {
+					var pdresults = $.parseJSON('["Harry Potter", "26/6/1997", "0747532699", "4"]');
+					
+					updatePatient(pdresults); // TODO: change to data
+				})
+				.fail(function (xmlHttpRequest, textStatus) {
+					$("#patientname").text("Error: " + textStatus);
+					$("#patientdob").text("Error: " + textStatus);
+					$("#patientnews").text("Error: " + textStatus);
+					$("#patientmrn").text("Error: " + textStatus);
+				});
+
+				$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20search.termextract%20where%20context%3D%22Italian%20sculptors%20and%20painters%20of%20the%20renaissance%20favored%20the%20Virgin%20Mary%20for%20inspiration%22%20and%20query%3D%22madonna%22&format=json", function(data) {
+					var rrresults = $.parseJSON('[["2013-05-26T08:28:42Z", 20],["2013-05-26T15:21:09Z", 18],["2013-05-26T19:35:22Z", 22]]');
+					updateRespiratoryRates(rrresults); // TODO: Use data.
+				});
+
+				$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20search.termextract%20where%20context%3D%22Italian%20sculptors%20and%20painters%20of%20the%20renaissance%20favored%20the%20Virgin%20Mary%20for%20inspiration%22%20and%20query%3D%22madonna%22&format=json", function(data) {
+					var spresults = $.parseJSON('[["2013-05-26T08:28:42Z", 95],["2013-05-26T15:21:09Z", 96],["2013-05-26T19:35:22Z", 95]]');
+					updateSpO2Rates(spresults); // TODO: Use data.
+				});
+
+				$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20search.termextract%20where%20context%3D%22Italian%20sculptors%20and%20painters%20of%20the%20renaissance%20favored%20the%20Virgin%20Mary%20for%20inspiration%22%20and%20query%3D%22madonna%22&format=json", function(data) {
+					var tempresults = $.parseJSON('[["2013-05-26T08:28:42Z", 37.6],["2013-05-26T15:21:09Z", 38.2],["2013-05-26T19:35:22Z", 38.5]]');
+					updateTemperatures(tempresults); // TODO: Use data.
+				});
+
+				$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20search.termextract%20where%20context%3D%22Italian%20sculptors%20and%20painters%20of%20the%20renaissance%20favored%20the%20Virgin%20Mary%20for%20inspiration%22%20and%20query%3D%22madonna%22&format=json", function(data) {
+					var bpresults = $.parseJSON('[["2013-05-26T08:28:42Z", 120, 80],["2013-05-26T15:21:09Z", 124, 77],["2013-05-26T19:35:22Z", 117, 71]]');
+					var catOHLC = [[1.7, bpresults[0][1], bpresults[0][2], calculateMap(bpresults[0][1],bpresults[0][2])],
+					               [data.query.count, bpresults[1][1], bpresults[1][2], calculateMap(bpresults[1][1],bpresults[1][2])],
+					               [3, bpresults[2][1], bpresults[2][2], calculateMap(bpresults[2][1],bpresults[2][2])]];
+					                
+					               var ticks = ["5-4d", "4-3d", "3-2d", data.query.count, "24-18h", "18-12h", "12-6h", "6-0h"];
+					                    
+					               plot4 = $.jqplot('BPchart',[catOHLC],{
+					                 axes: {
+					                     xaxis: {
+					                         renderer:$.jqplot.CategoryAxisRenderer,
+					                         ticks:ticks
+					                     },
+					                     yaxis: {
+					                    	 min:40, max:230
+					                     }
+					                 },
+					                 series: [{renderer:$.jqplot.OHLCRenderer, rendererOptions:{candleStick:false, openColor:'#000000', closeColor:'#000000', upBodyColor:'#000000', downBodyColor:'#000000', wickColor:'#000000'}}], grid: {drawGridlines: false}
+					               });
+					       });
+				
+				$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20search.termextract%20where%20context%3D%22Italian%20sculptors%20and%20painters%20of%20the%20renaissance%20favored%20the%20Virgin%20Mary%20for%20inspiration%22%20and%20query%3D%22madonna%22&format=json", function(data) {
+
+					var hrresults = $.parseJSON('[["2013-05-26T08:28:42Z", 90],["2013-05-26T15:21:09Z", 108],["2013-05-26T19:35:22Z", 122]]');
+					updateHeartRates(hrresults); // TODO: Use data.
+				});
+		  });
+		</SCRIPT>		
+	</HEAD>
+	<BODY>
+		<HEADER>
+			<P id="patientnews">(#)</P>
+			<P id="runtime">##:##</P>
+			<P>
+				<SPAN id="patientname">Name</SPAN>
+			</P>
+			<P>
+				<SPAN id="patientdob">D.o.B.</SPAN>
+				<SPAN id="patientmrn">Hospital No.</SPAN>
+			</P>
+		</HEADER>
+
+		<SECTION id="RespRate">
+			<div id="RRchart" style="height:75px; width:320px;">
+				<p>&nbsp;</p><p>loading</p>
+			</div>
+		</SECTION>
+		<SECTION id="SpO2Rate">
+			<div id="SPchart" style="height:75px; width:320px;">
+				<p>&nbsp;</p><p>loading</p>
+			</div>
+		</SECTION>
+		<SECTION id="Temperature">
+			<div id="Tempchart" style="height:75px; width:320px;">
+				<p>&nbsp;</p><p>loading</p>
+			</div>
+		</SECTION>
+		<SECTION id="BP">
+			<div id="BPchart" style="height:150px; width:320px;">
+				<p>&nbsp;</p><p>loading</p><p><img src="377.gif" alt="loading" /></p>
+			</div>
+		</SECTION>
+		<SECTION id="HeartRate">
+			<div id="HRchart" style="height:75px; width:320px;">
+				<p>&nbsp;</p><p>loading</p>
+			</div>
+		</SECTION>
+		
+		<FOOTER>
+			<IMG SRC="nhshackday-logo-full.png" />
+		</FOOTER>
+	</BODY>
+</HTML>
